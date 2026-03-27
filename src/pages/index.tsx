@@ -268,7 +268,7 @@ const heroLinks = [
   },
   {
     label: 'VCReward-Bench',
-    href: 'https://gitlab.basemind.com/i-jiangzhangqi/open_edit',
+    href: 'https://github.com/ZhangqiJiang07/GEditBench_v2',
   },
   {
     label: 'PVC-Judge',
@@ -276,7 +276,7 @@ const heroLinks = [
   },
   {
     label: 'Code',
-    href: '/docs/intro',
+    href: 'https://github.com/ZhangqiJiang07/GEditBench_v2',
   },
 ];
 

@@ -11,10 +11,10 @@ const config: Config = {
     v4: true,
   },
 
-  url: 'https://autopipeline-docs.example.com',
-  baseUrl: '/',
-  organizationName: 'open-edit',
-  projectName: 'autopipeline-docs',
+  url: 'https://zhangqijiang07.github.io',
+  baseUrl: '/gedit2_web/',
+  organizationName: 'ZhangqiJiang07',
+  projectName: 'gedit2_web',
 
   onBrokenLinks: 'throw',
   markdown: {
@@ -36,7 +36,7 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           routeBasePath: 'docs',
           editUrl:
-            'https://gitlab.basemind.com/i-jiangzhangqi/open_edit/-/tree/main',
+            'https://github.com/ZhangqiJiang07/gedit2_web/tree/main/',
           showLastUpdateTime: true,
         },
         blog: false,
@@ -72,7 +72,7 @@ const config: Config = {
           label: 'Pipeline Docs',
         },
         {
-          href: 'https://gitlab.basemind.com/i-jiangzhangqi/open_edit',
+          href: 'https://github.com/ZhangqiJiang07/GEditBench_v2',
           label: 'Repo',
           position: 'right',
         },

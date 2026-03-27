@@ -1,41 +1,33 @@
-# Website
+# gedit2_web
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+This repository hosts the standalone Docusaurus site for GEditBench v2.
+
+## Requirements
+
+- Node.js `>=20`
+- npm
 
 ## Installation
 
 ```bash
-yarn
+npm ci
 ```
 
 ## Local Development
 
 ```bash
-yarn start
+npm start
 ```
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
-
-## Build
+## Production Build
 
 ```bash
-yarn build
+npm run build
 ```
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+The static site is generated into `build/`.
 
 ## Deployment
 
-Using SSH:
-
-```bash
-USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```bash
-GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+GitHub Pages deployment is handled by the workflow in `.github/workflows/deploy-pages.yml`.
+Pushes to `main` rebuild and deploy the site to the `gedit2_web` project page.
