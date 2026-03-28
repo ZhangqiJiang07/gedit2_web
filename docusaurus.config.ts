@@ -54,9 +54,9 @@ const config: Config = {
       respectPrefersColorScheme: false,
     },
     navbar: {
-      title: 'AutoPipeline',
+      title: 'GEditBench v2',
       logo: {
-        alt: 'AutoPipeline Logo',
+        alt: 'GEditBench v2 Logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -121,7 +121,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} AutoPipeline Contributors.`,
+      copyright: `Copyright © ${new Date().getFullYear()} GEditBench v2 Contributors. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,

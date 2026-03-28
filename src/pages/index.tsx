@@ -2,7 +2,7 @@ import {useRef, useState, type ReactNode} from 'react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
-import useBaseUrl from '@docusaurus/useBaseUrl';
+import useBaseUrl, {useBaseUrlUtils} from '@docusaurus/useBaseUrl';
 import styles from './index.module.css';
 
 type PaperAuthor = {
@@ -27,10 +27,13 @@ type LeaderboardEntry = {
   arena: string;
 };
 
-type QualitativeCase = {
+type ShowcaseCase = {
   title: string;
   image1200: string;
+  image1800?: string;
   alt: string;
+  width: number;
+  height: number;
 };
 
 const paperAffiliations: PaperAffiliation[] = [
@@ -289,17 +292,17 @@ const heroFacts = [
   {
     value: '2',
     label: 'VCReward-Bench',
-    detail: 'evaluate assessment models for instruction-guided image editing in visual consistency, supported by 3,506 expert-annotated preference pairs',
+    detail: 'including 3,506 expert-annotated preference pairs for evaluating assessment models of image editing in visual consistency.',
   },
   {
     value: '3',
     label: 'PVC-Judge',
-    detail: 'a pairwise assessment model for visual consistency',
+    detail: 'a pairwise assessment model for evaluating editing visual consistency.',
   },
   {
     value: '4',
     label: 'AutoPipeline',
-    detail: 'two novel region-decoupled preference data synthesis pipelines with ',
+    detail: 'two novel region-decoupled preference data synthesis pipelines.',
   },
 ];
 
@@ -424,21 +427,78 @@ const resourceRows = [
   },
 ];
 
-const qualitativeCases: QualitativeCase[] = [
+const overviewSpecialCases: ShowcaseCase[] = [
+  {
+    title: 'Open-Set Instructions',
+    image1200: '/paper_img/bench_cases/open_set-1200.webp',
+    image1800: '/paper_img/bench_cases/open_set-1800.webp',
+    alt: 'Benchmark case for open-set image editing instructions',
+    width: 4400,
+    height: 2059,
+  },
+  {
+    title: 'Object Reference',
+    image1200: '/paper_img/bench_cases/object_reference-1200.webp',
+    image1800: '/paper_img/bench_cases/object_reference-1800.webp',
+    alt: 'Benchmark case for object reference image editing',
+    width: 4400,
+    height: 1531,
+  },
+  {
+    title: 'Relation Change',
+    image1200: '/paper_img/bench_cases/relation_change-1200.webp',
+    image1800: '/paper_img/bench_cases/relation_change-1800.webp',
+    alt: 'Benchmark case for relation change image editing',
+    width: 4406,
+    height: 1531,
+  },
+  {
+    title: 'Camera Motion',
+    image1200: '/paper_img/bench_cases/camera_motion-1200.webp',
+    image1800: '/paper_img/bench_cases/camera_motion-1800.webp',
+    alt: 'Benchmark case for camera motion image editing',
+    width: 4400,
+    height: 1531,
+  },
+  {
+    title: 'Text Editing',
+    image1200: '/paper_img/bench_cases/text_editing-1200.webp',
+    image1800: '/paper_img/bench_cases/text_editing-1800.webp',
+    alt: 'Benchmark case for text editing',
+    width: 4406,
+    height: 1531,
+  },
+  {
+    title: 'Chart Editing',
+    image1200: '/paper_img/bench_cases/chart_editing-1200.webp',
+    image1800: '/paper_img/bench_cases/chart_editing-1800.webp',
+    alt: 'Benchmark case for chart editing',
+    width: 4400,
+    height: 1531,
+  },
+];
+
+const qualitativeCases: ShowcaseCase[] = [
   {
     title: 'Open-Set Edits',
     image1200: '/paper_img/cases1-1200.webp',
     alt: 'Qualitative analysis case on open-set edits',
+    width: 4318,
+    height: 3057,
   },
   {
     title: 'Weak Perception of Inter-Object Relations.',
     image1200: '/paper_img/cases2-1200.webp',
     alt: 'Qualitative analysis case on weak perception of inter-object relations',
+    width: 4317,
+    height: 2099,
   },
   {
     title: 'Struggle with Small Faces.',
     image1200: '/paper_img/cases3-1200.webp',
     alt: 'Qualitative analysis case on struggle with small faces',
+    width: 4652,
+    height: 7384,
   },
 ];
 
@@ -464,7 +524,7 @@ const pipelineDocLinks = [
 type SectionProps = {
   eyebrow: string;
   title: string;
-  lead?: string;
+  lead?: ReactNode;
   toneClassName: string;
   wideHeader?: boolean;
   children: ReactNode;
@@ -535,6 +595,149 @@ function splitMetric(metric: string): {value: string; ci: string} {
 function splitArena(arena: string): {elo: string; rank: string} {
   const [elo = arena, rank = ''] = arena.split(' / ');
   return {elo, rank};
+}
+
+type ShowcaseCarouselProps = {
+  cases: ShowcaseCase[];
+  ariaLabel: string;
+  compact?: boolean;
+  eagerCount?: number;
+};
+
+function ShowcaseCarousel({
+  cases,
+  ariaLabel,
+  compact = false,
+  eagerCount = 1,
+}: ShowcaseCarouselProps): ReactNode {
+  const {withBaseUrl} = useBaseUrlUtils();
+  const carouselRef = useRef<HTMLDivElement | null>(null);
+  const slideRefs = useRef<Array<HTMLElement | null>>([]);
+  const [currentCase, setCurrentCase] = useState(0);
+
+  const scrollToCase = (targetIndex: number) => {
+    const node = carouselRef.current;
+    const targetSlide = slideRefs.current[targetIndex];
+
+    if (!node || !targetSlide) {
+      return;
+    }
+
+    const centeredLeft =
+      targetSlide.offsetLeft - (node.clientWidth - targetSlide.clientWidth) / 2;
+
+    node.scrollTo({left: centeredLeft, behavior: 'smooth'});
+    setCurrentCase(targetIndex);
+  };
+
+  const scrollCarousel = (direction: 'prev' | 'next') => {
+    const nextIndex =
+      direction === 'next'
+        ? Math.min(currentCase + 1, cases.length - 1)
+        : Math.max(currentCase - 1, 0);
+
+    scrollToCase(nextIndex);
+  };
+
+  const handleCarouselScroll = () => {
+    const node = carouselRef.current;
+
+    if (!node) {
+      return;
+    }
+
+    const viewportCenter = node.scrollLeft + node.clientWidth / 2;
+    let nextIndex = currentCase;
+    let smallestDistance = Number.POSITIVE_INFINITY;
+
+    slideRefs.current.forEach((slide, index) => {
+      if (!slide) {
+        return;
+      }
+
+      const slideCenter = slide.offsetLeft + slide.clientWidth / 2;
+      const distance = Math.abs(slideCenter - viewportCenter);
+
+      if (distance < smallestDistance) {
+        smallestDistance = distance;
+        nextIndex = index;
+      }
+    });
+
+    if (nextIndex !== currentCase) {
+      setCurrentCase(nextIndex);
+    }
+  };
+
+  return (
+    <div
+      className={
+        compact
+          ? `${styles.showcaseStage} ${styles.showcaseStageCompact}`
+          : styles.showcaseStage
+      }>
+      <button
+        type="button"
+        className={`${styles.carouselButton} ${styles.carouselButtonLeft}`}
+        onClick={() => scrollCarousel('prev')}
+        disabled={currentCase === 0}
+        aria-label={`Show previous ${ariaLabel.toLowerCase()}`}>
+        Prev
+      </button>
+      <div
+        ref={carouselRef}
+        className={styles.showcaseCarousel}
+        onScroll={handleCarouselScroll}
+        aria-label={ariaLabel}>
+        <div className={styles.showcaseSpacer} aria-hidden="true" />
+        {cases.map((item, index) => {
+          const imageUrl1200 = withBaseUrl(item.image1200);
+          const imageUrl1800 = item.image1800
+            ? withBaseUrl(item.image1800)
+            : undefined;
+
+          return (
+            <article
+              key={item.title}
+              ref={(node) => {
+                slideRefs.current[index] = node;
+              }}
+              className={
+                index === currentCase
+                  ? `${styles.showcaseSlide} ${styles.showcaseSlideActive}`
+                  : styles.showcaseSlide
+              }>
+              <p className={styles.showcaseLabel}>{item.title}</p>
+              <img
+                className={styles.showcaseImage}
+                src={imageUrl1800 ?? imageUrl1200}
+                srcSet={
+                  imageUrl1800
+                    ? `${imageUrl1200} 1200w, ${imageUrl1800} 1800w`
+                    : undefined
+                }
+                sizes="(max-width: 640px) 86vw, (max-width: 996px) 82vw, 920px"
+                alt={item.alt}
+                width={item.width}
+                height={item.height}
+                loading={index < eagerCount ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+            </article>
+          );
+        })}
+        <div className={styles.showcaseSpacer} aria-hidden="true" />
+      </div>
+      <button
+        type="button"
+        className={`${styles.carouselButton} ${styles.carouselButtonRight}`}
+        onClick={() => scrollCarousel('next')}
+        disabled={currentCase === cases.length - 1}
+        aria-label={`Show next ${ariaLabel.toLowerCase()}`}>
+        Next
+      </button>
+    </div>
+  );
 }
 
 function HeroSection(): ReactNode {
@@ -616,6 +819,17 @@ function OverviewSection(): ReactNode {
           decoding="async"
         />
       </div>
+      <div className={styles.overviewCasesBlock}>
+        <div className={styles.overviewCasesHeader}>
+          <p className={styles.overviewCasesEyebrow}>Benchmark Samples</p>
+        </div>
+        <ShowcaseCarousel
+          cases={overviewSpecialCases}
+          ariaLabel="special benchmark cases"
+          compact
+          eagerCount={1}
+        />
+      </div>
     </Section>
   );
 }
@@ -625,17 +839,21 @@ function LeaderboardSection(): ReactNode {
     <Section
       eyebrow="Leaderboard"
       title="Leaderboard on GEditBench v2"
-      lead="Models are ranked by overall Elo from pairwise comparisons. Instruction Following and Visual Quality are assessed by GPT-4o, while Visual Consistency is evaluated by PVC-Judge. Confidence intervals come from the leaderboard reported in static/tables/main_res.tex."
+      lead={
+        <>
+          Models are ranked by OVERALL Elo score from pairwise comparisons.
+          Instruction Following and Visual Quality are assessed by GPT-4o,
+          while Visual Consistency is evaluated by PVC-Judge. Confidence
+          Intervals compute by 1,000 bootstrap iterations. *Arena Elo scores
+          were recorded on March 26, 2026, from the{' '}
+          <Link href="https://artificialanalysis.ai/image/leaderboard/editing">
+            Artificial Analysis
+          </Link>.
+        </>
+      }
       wideHeader
       toneClassName={styles.toneA}>
-      <div className={styles.leaderboardIntro}>
-        <p className={styles.leaderboardNote}>
-          Overall Elo scores and 95% confidence intervals are computed via 1,000
-          bootstrap iterations. Arena values below are reported alongside their
-          recorded rank on March 26, 2026.
-        </p>
-      </div>
-          <div className={styles.leaderboardTableWrap}>
+      <div className={styles.leaderboardTableWrap}>
         <table className={styles.leaderboardTable}>
           <colgroup>
             <col className={styles.rankCol} />
@@ -748,10 +966,17 @@ function AutoPipelineSection(): ReactNode {
   return (
     <Section
       eyebrow="AutoPipeline"
-      title="AutoPipeline for structured image-edit evaluation"
+      title="AutoPipeline for structured editing consistency evaluation"
       lead="AutoPipeline organizes evaluation into task-adaptive pipelines. For object-centric edits, it spatially decouples edited and non-edited regions before applying region-specific metrics; for human-centric edits, it routes face, body, and hair related changes into dedicated evaluation branches and rubric-aware outputs."
       wideHeader
       toneClassName={styles.toneB}>
+      <div className={styles.pipelineCtaRow}>
+        {pipelineDocLinks.map((item) => (
+          <Link key={item.label} className={styles.pipelineCta} to={item.href}>
+            {item.label}
+          </Link>
+        ))}
+      </div>
       <div className={styles.pipelineFigure}>
         <img
           className={styles.pipelineImage}
@@ -765,13 +990,6 @@ function AutoPipelineSection(): ReactNode {
           decoding="async"
         />
       </div>
-      <div className={styles.pipelineCtaRow}>
-        {pipelineDocLinks.map((item) => (
-          <Link key={item.label} className={styles.pipelineCta} to={item.href}>
-            {item.label}
-          </Link>
-        ))}
-      </div>
     </Section>
   );
 }
@@ -783,8 +1001,22 @@ function PVCJudgeSection(): ReactNode {
   return (
     <Section
       eyebrow="PVC-Judge"
-      title="PVC-Judge performance on EditScore Reward-Bench and VCReward-Bench"
-      lead="We evaluate PVC-Judge on two complementary reward benchmarks. The radar plots compare pairwise judges and pointwise scoring baselines across diverse editing tasks, showing that PVC-Judge delivers consistently strong alignment with human preference, especially on visual consistency sensitive categories."
+      title="Alignment with Human Judgments"
+      lead={
+        <>
+          We evaluate PVC-Judge on{' '}
+          <Link href="https://huggingface.co/datasets/EditScore/EditReward-Bench">
+            EditScoreReward-Bench
+          </Link>{' '}
+          and our{' '}
+          <Link href="https://huggingface.co/datasets/GEditBench-v2/VCReward-Bench">
+            VCReward-Bench
+          </Link>
+          . PVC-Judge achieves strong alignment with human preferences, 
+          setting a new state-of-the-art among open-source assessment 
+          models and even outperforming GPT-5.1 on average.
+        </>
+      }
       toneClassName={styles.toneA}>
       <div className={styles.rewardFigure}>
         <img
@@ -804,118 +1036,16 @@ function PVCJudgeSection(): ReactNode {
 }
 
 function QualitativeSection(): ReactNode {
-  const carouselRef = useRef<HTMLDivElement | null>(null);
-  const slideRefs = useRef<Array<HTMLElement | null>>([]);
-  const [currentCase, setCurrentCase] = useState(0);
-
-  const scrollToCase = (targetIndex: number) => {
-    const node = carouselRef.current;
-    const targetSlide = slideRefs.current[targetIndex];
-
-    if (!node || !targetSlide) {
-      return;
-    }
-
-    const centeredLeft =
-      targetSlide.offsetLeft - (node.clientWidth - targetSlide.clientWidth) / 2;
-
-    node.scrollTo({left: centeredLeft, behavior: 'smooth'});
-    setCurrentCase(targetIndex);
-  };
-
-  const scrollCarousel = (direction: 'prev' | 'next') => {
-    const nextIndex =
-      direction === 'next'
-        ? Math.min(currentCase + 1, qualitativeCases.length - 1)
-        : Math.max(currentCase - 1, 0);
-
-    scrollToCase(nextIndex);
-  };
-
-  const handleCarouselScroll = () => {
-    const node = carouselRef.current;
-
-    if (!node) {
-      return;
-    }
-
-    const viewportCenter = node.scrollLeft + node.clientWidth / 2;
-    let nextIndex = currentCase;
-    let smallestDistance = Number.POSITIVE_INFINITY;
-
-    slideRefs.current.forEach((slide, index) => {
-      if (!slide) {
-        return;
-      }
-
-      const slideCenter = slide.offsetLeft + slide.clientWidth / 2;
-      const distance = Math.abs(slideCenter - viewportCenter);
-
-      if (distance < smallestDistance) {
-        smallestDistance = distance;
-        nextIndex = index;
-      }
-    });
-
-    if (nextIndex !== currentCase) {
-      setCurrentCase(nextIndex);
-    }
-  };
-
   return (
     <Section
       eyebrow="Qualitative Analysis"
-      title="Representative failure cases from GEditBench v2"
-      lead="We highlight several recurring failure modes revealed by human-aligned evaluation, including open-set reasoning errors, weak perception of inter-object relations, and difficulty handling fine facial details at small scale."
+      title="Qualitative Analysis"
       toneClassName={styles.toneB}>
-      <div className={styles.qualitativeStage}>
-        <button
-          type="button"
-          className={`${styles.carouselButton} ${styles.carouselButtonLeft}`}
-          onClick={() => scrollCarousel('prev')}>
-          disabled={currentCase === 0}
-          Prev
-        </button>
-        <div
-          ref={carouselRef}
-          className={styles.qualitativeCarousel}
-          onScroll={handleCarouselScroll}>
-          <div className={styles.qualitativeSpacer} aria-hidden="true" />
-          {qualitativeCases.map((item, index) => {
-          const imageUrl = useBaseUrl(item.image1200);
-
-          return (
-            <article
-              key={item.title}
-              ref={(node) => {
-                slideRefs.current[index] = node;
-              }}
-              className={
-                index === currentCase
-                  ? `${styles.qualitativeSlide} ${styles.qualitativeSlideActive}`
-                  : styles.qualitativeSlide
-              }>
-              <p className={styles.qualitativeLabel}>{item.title}</p>
-              <img
-                className={styles.qualitativeImage}
-                src={imageUrl}
-                alt={item.alt}
-                loading={index === 0 ? 'eager' : 'lazy'}
-                decoding="async"
-              />
-            </article>
-          );
-        })}
-          <div className={styles.qualitativeSpacer} aria-hidden="true" />
-        </div>
-        <button
-          type="button"
-          className={`${styles.carouselButton} ${styles.carouselButtonRight}`}
-          onClick={() => scrollCarousel('next')}
-          disabled={currentCase === qualitativeCases.length - 1}>
-          Next
-        </button>
-      </div>
+      <ShowcaseCarousel
+        cases={qualitativeCases}
+        ariaLabel="qualitative analysis cases"
+        eagerCount={1}
+      />
     </Section>
   );
 }
