@@ -480,9 +480,9 @@ const overviewSpecialCases: ShowcaseCase[] = [
 
 const qualitativeCases: ShowcaseCase[] = [
   {
-    title: 'Open-Set Edits',
+    title: 'Struggle with Small Faces.',
     image1200: '/paper_img/cases1-1200.webp',
-    alt: 'Qualitative analysis case on open-set edits',
+    alt: 'Qualitative analysis case on struggle with small faces',
     width: 4318,
     height: 3057,
   },
@@ -495,10 +495,10 @@ const qualitativeCases: ShowcaseCase[] = [
     height: 3204,
   },
   {
-    title: 'Struggle with Small Faces.',
+    title: 'Open-Set Edits',
     image1200: '/paper_img/cases3-1200.webp',
     image1800: '/paper_img/cases3-1800.webp',
-    alt: 'Qualitative analysis case on struggle with small faces',
+    alt: 'Qualitative analysis case on open-set edits',
     width: 4652,
     height: 3543,
   },
