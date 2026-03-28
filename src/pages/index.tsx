@@ -489,16 +489,18 @@ const qualitativeCases: ShowcaseCase[] = [
   {
     title: 'Weak Perception of Inter-Object Relations.',
     image1200: '/paper_img/cases2-1200.webp',
+    image1800: '/paper_img/cases2-1800.webp',
     alt: 'Qualitative analysis case on weak perception of inter-object relations',
     width: 4317,
-    height: 2099,
+    height: 3204,
   },
   {
     title: 'Struggle with Small Faces.',
     image1200: '/paper_img/cases3-1200.webp',
+    image1800: '/paper_img/cases3-1800.webp',
     alt: 'Qualitative analysis case on struggle with small faces',
     width: 4652,
-    height: 7384,
+    height: 3543,
   },
 ];
 

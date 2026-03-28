@@ -28,6 +28,7 @@ const sidebars: SidebarsConfig = {
         'tutorial/guide-for-pipelines/vlm-as-a-judge',
       ],
     },
+    /*
     {
       type: 'category',
       label: 'Architecture',
@@ -36,6 +37,7 @@ const sidebars: SidebarsConfig = {
         'concepts/config-system',
       ],
     },
+    */
     {
       type: 'category',
       label: 'Components',
