@@ -267,15 +267,15 @@ const heroLinks = [
   },
   {
     label: 'GEditBench v2',
-    href: 'https://huggingface.co/',
+    href: 'https://huggingface.co/datasets/GEditBench-v2/GEditBench-v2',
   },
   {
     label: 'VCReward-Bench',
-    href: 'https://github.com/ZhangqiJiang07/GEditBench_v2',
+    href: 'https://huggingface.co/datasets/GEditBench-v2/VCReward-Bench',
   },
   {
     label: 'PVC-Judge',
-    href: '/docs/intro',
+    href: 'https://huggingface.co/GEditBench-v2/PVC-Judge',
   },
   {
     label: 'Code',
