@@ -69,7 +69,7 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Pipeline Docs',
+          label: 'Pipeline Docs (!written entirely by Codex, gpt-5.4 xhigh!)',
         },
         {
           href: 'https://github.com/ZhangqiJiang07/GEditBench_v2',
