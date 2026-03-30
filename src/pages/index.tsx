@@ -776,10 +776,10 @@ function HeroSection(): ReactNode {
               GEditBench v2
             </span>
             <span className={`${styles.heroTitleLine} ${styles.heroTitleSupport}`}>
-              A Human-Aligned Benchmark
+              A Human-Aligned Benchmark for
             </span>
             <span className={`${styles.heroTitleLine} ${styles.heroTitleSupport}`}>
-              for General Image Editing
+              General Image Editing
             </span>
           </Heading>
           <div className={styles.heroMeta}>
