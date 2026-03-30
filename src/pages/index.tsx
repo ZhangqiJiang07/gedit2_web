@@ -893,7 +893,7 @@ function LeaderboardSection(): ReactNode {
           </Link>.
           Our overall Elo ranking achieves <strong>a strong Spearman's 
           rank correlation (ρ = 0.929, p &lt; 2 × 10<sup>-7</sup>)</strong> with 
-          the Arena rankings, validating that our automated evaluation 
+          the Arena ranking, validating that our automated evaluation 
           ecosystem reliably aligns with human preferences.
         </>
       }
