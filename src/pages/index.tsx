@@ -260,8 +260,8 @@ const heroAbstract: ReactNode = (
     real-world user queries spanning 23 tasks, including a dedicated open-set
     category for unconstrained, out-of-distribution editing instructions beyond
     predefined tasks. Furthermore, we propose <strong>PVC-Judge</strong>, an
-    open-source pairwise assessment model for visual consistency, trained via
-    two novel region-decoupled preference data synthesis pipelines. Besides, we
+    open-source pairwise assessment model for visual consistency, <strong>trained via
+    two novel region-decoupled preference data synthesis pipelines</strong>. Besides, we
     construct <strong>VCReward-Bench</strong> using expert-annotated preference
     pairs to assess the alignment of PVC-Judge with human judgments on visual
     consistency evaluation. Experiments show that our PVC-Judge achieves
