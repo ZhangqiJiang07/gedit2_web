@@ -880,14 +880,14 @@ function LeaderboardSection(): ReactNode {
   return (
     <Section
       eyebrow="Leaderboard"
-      title="Leaderboard on GEditBench v2"
+      title="Model Arena on GEditBench v2"
       lead={
         <>
           Models are ranked by OVERALL Elo score from pairwise comparisons.
           Instruction Following and Visual Quality are assessed by GPT-4o,
           while Visual Consistency is evaluated by PVC-Judge. Confidence
-          Intervals compute by 1,000 bootstrap iterations. *Arena Elo scores
-          were recorded on March 26, 2026, from the{' '}
+          Intervals are computed by 1,000 bootstrap iterations. *Arena Elo scores
+          were recorded on March 26, 2026, from{' '}
           <Link href="https://artificialanalysis.ai/image/leaderboard/editing">
             Artificial Analysis
           </Link>.
