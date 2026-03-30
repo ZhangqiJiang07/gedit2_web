@@ -891,8 +891,8 @@ function LeaderboardSection(): ReactNode {
           <Link href="https://artificialanalysis.ai/image/leaderboard/editing">
             Artificial Analysis
           </Link>.
-          Our overall Elo ranking achieves an exceptionally strong Spearman's 
-          rank correlation <strong>(ρ = 0.929, p < 2 × 10<sup>-7</sup>)</strong> 
+          Our overall Elo ranking achieves a strong Spearman's 
+          rank correlation <strong>(ρ = 0.929, p &lt; 2 × 10<sup>-7</sup>)</strong> 
           with the Arena rankings, validating that our automated evaluation 
           ecosystem reliably aligns with human preferences.
         </>
