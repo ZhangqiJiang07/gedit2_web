@@ -8,11 +8,17 @@ import styles from './index.module.css';
 type PaperAuthor = {
   name: string;
   affiliations: number[];
+  notes?: string[];
 };
 
 type PaperAffiliation = {
   id: number;
   name: string;
+};
+
+type AuthorNote = {
+  symbol: string;
+  label: string;
 };
 
 type LeaderboardEntry = {
@@ -42,19 +48,26 @@ const paperAffiliations: PaperAffiliation[] = [
   {id: 3, name: 'Southeast University'},
 ];
 
+const authorNotes: AuthorNote[] = [
+  {symbol: '†', label: 'Project leader'},
+  {symbol: '*', label: 'Corresponding author'},
+];
+
 // Fill each author's affiliation ids using the numbered institutions above.
 const paperAuthors: PaperAuthor[] = [
   {name: 'Zhangqi Jiang', affiliations: [1, 2]},
   {name: 'Zheng Sun', affiliations: [2]},
-  {name: 'Xianfang Zeng', affiliations: [2]},
+  {name: 'Xianfang Zeng', affiliations: [2], notes: ['†']},
   {name: 'Yufeng Yang', affiliations: [2]},
   {name: 'Xuanyang Zhang', affiliations: [2]},
   {name: 'Yongliang Wu', affiliations: [3]},
   {name: 'Wei Cheng', affiliations: [2]},
   {name: 'Gang Yu', affiliations: [2]},
-  {name: 'Xu Yang', affiliations: [3]},
-  {name: 'Bihan Wen', affiliations: [1]},
+  {name: 'Xu Yang', affiliations: [3], notes: ['*']},
+  {name: 'Bihan Wen', affiliations: [1], notes: ['*']},
 ];
+
+const paperAuthorRows = splitIntoRows(paperAuthors, 2);
 
 const leaderboardEntries: LeaderboardEntry[] = [
   {
@@ -569,16 +582,27 @@ function renderAffiliationSuperscript(affiliations: number[]): ReactNode {
   return <sup className={styles.affiliationSup}>{affiliations.join(',')}</sup>;
 }
 
-function getAuthorPrefix(index: number, total: number): string {
-  if (index === 0) {
-    return '';
+function renderAuthorNoteSuperscript(notes?: string[]): ReactNode {
+  if (!notes || notes.length === 0) {
+    return null;
   }
 
-  if (index === total - 1) {
-    return total === 2 ? ' and ' : ', and ';
+  return <sup className={styles.authorNoteSup}>{notes.join('')}</sup>;
+}
+
+function splitIntoRows<T>(items: T[], rowCount: number): T[][] {
+  if (items.length === 0 || rowCount <= 0) {
+    return [];
   }
 
-  return ', ';
+  const size = Math.ceil(items.length / rowCount);
+  const rows: T[][] = [];
+
+  for (let index = 0; index < items.length; index += size) {
+    rows.push(items.slice(index, index + size));
+  }
+
+  return rows;
 }
 
 function splitMetric(metric: string): {value: string; ci: string} {
@@ -747,38 +771,54 @@ function HeroSection(): ReactNode {
     <section className={`${styles.band} ${styles.toneA} ${styles.heroBand}`}>
       <div className={styles.inner}>
         <div className={styles.heroHeader}>
-          <p className={styles.eyebrow}>Project Page</p>
           <Heading as="h1" className={styles.heroTitle}>
-            <>
-              GEditBench v2:
-              <span className={styles.heroTitleSecondary}>
-                A Human-Aligned Benchmark for General Image Editing
-              </span>
-            </>
+            <span className={`${styles.heroTitleLine} ${styles.heroTitlePrimary}`}>
+              GEditBench v2
+            </span>
+            <span className={`${styles.heroTitleLine} ${styles.heroTitleSupport}`}>
+              A Human-Aligned Benchmark
+            </span>
+            <span className={`${styles.heroTitleLine} ${styles.heroTitleSupport}`}>
+              for General Image Editing
+            </span>
           </Heading>
-          <p className={styles.authorLine}>
-            {paperAuthors.map((author, index) => (
-              <span key={author.name}>
-                {getAuthorPrefix(index, paperAuthors.length)}
-                {author.name}
-                {renderAffiliationSuperscript(author.affiliations)}
-              </span>
-            ))}
-          </p>
-          <p className={styles.affiliationLine}>
-            {paperAffiliations.map((affiliation, index) => (
-              <span key={affiliation.id}>
-                {index > 0 ? ' | ' : ''}
-                {renderAffiliationSuperscript([affiliation.id])} {affiliation.name}
-              </span>
-            ))}
-          </p>
-          <div className={styles.heroLinks}>
-            {heroLinks.map((item) => (
-              <Link key={item.label} className={styles.heroLink} href={item.href}>
-                {item.label}
-              </Link>
-            ))}
+          <div className={styles.heroMeta}>
+            <div className={styles.authorBlock}>
+              {paperAuthorRows.map((row, rowIndex) => (
+                <p key={`author-row-${rowIndex}`} className={styles.authorLine}>
+                  {row.map((author) => (
+                    <span key={author.name} className={styles.authorChip}>
+                      <span>{author.name}</span>
+                      {renderAffiliationSuperscript(author.affiliations)}
+                      {renderAuthorNoteSuperscript(author.notes)}
+                    </span>
+                  ))}
+                </p>
+              ))}
+            </div>
+            <p className={styles.affiliationLine}>
+              {paperAffiliations.map((affiliation) => (
+                <span key={affiliation.id} className={styles.affiliationChip}>
+                  {renderAffiliationSuperscript([affiliation.id])}
+                  <span>{affiliation.name}</span>
+                </span>
+              ))}
+            </p>
+            <div className={styles.authorNotes}>
+              {authorNotes.map((note) => (
+                <span key={note.symbol} className={styles.authorNoteBadge}>
+                  <span className={styles.authorNoteSymbol}>{note.symbol}</span>
+                  <span>{note.label}</span>
+                </span>
+              ))}
+            </div>
+            <div className={styles.heroLinks}>
+              {heroLinks.map((item) => (
+                <Link key={item.label} className={styles.heroLink} href={item.href}>
+                  {item.label}
+                </Link>
+              ))}
+            </div>
           </div>
           <p className={styles.heroAbstract}>{heroAbstract}</p>
         </div>
