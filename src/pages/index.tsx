@@ -276,7 +276,7 @@ const heroAbstract: ReactNode = (
 const heroLinks = [
   {
     label: 'arXiv',
-    href: 'https://arxiv.org/',
+    href: 'https://arxiv.org/abs/2603.28547',
   },
   {
     label: 'GEditBench v2',
